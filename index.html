@@ -804,7 +804,8 @@
             soundEffects: true,
             backgroundMusic: true,
             volume: 0.7,
-            startingCoins: 100
+            startingCoins: 100,
+            theme: 'dark'
         };
 
         // DOM Elements
@@ -845,23 +846,30 @@
 
         // Audio elements
         const audio = {
-        win: new Audio('win.mp3'),
-        lose: new Audio('lose.mp3'),
-        button: new Audio('button.mp3'),
-        background: new Audio('background.mp3')
-    };
+            win: new Audio('win.mp3'),
+            lose: new Audio('lose.mp3'),
+            button: new Audio('button.mp3'),
+            background: new Audio('background.mp3')
+        };
 
-    // Set audio properties
-    Object.values(audio).forEach(sound => {
-        sound.volume = 0.4; // Set volume to 40%
-        sound.autoplay = true; // Autoplay audio
-    });
+        // Set audio properties
+        Object.values(audio).forEach(sound => {
+            sound.volume = gameState.volume;
+            sound.autoplay = true;
+        });
 
-    audio.background.loop = true;
+        audio.background.loop = true;
+
+        // Function to stop all sounds
+        function stopAllSounds() {
+            Object.values(audio).forEach(sound => sound.pause());
+            Object.values(audio).forEach(sound => sound.currentTime = 0);
+        }
 
         // Initialize game
         function initGame() {
             loadGameState();
+            loadTheme();
             generateNumber();
             updateUI();
 
@@ -883,15 +891,12 @@
 
             switch (gameState.difficulty) {
                 case 'easy':
-                    // In easy mode, numbers are more evenly distributed
                     randomNumber = Math.random();
                     break;
                 case 'medium':
-                    // In medium mode, numbers tend to cluster more
                     randomNumber = (Math.random() + Math.random()) / 2;
                     break;
                 case 'hard':
-                    // In hard mode, numbers are more likely to be at extremes
                     randomNumber = Math.random() < 0.5 ?
                         Math.random() * 0.4 : 0.6 + (Math.random() * 0.4);
                     break;
@@ -964,6 +969,7 @@
 
                 // Play sound
                 if (gameState.soundEffects) {
+                    stopAllSounds();
                     audio.win.play().catch(e => console.log('Audio play prevented:', e));
                 }
             } else {
@@ -975,6 +981,7 @@
 
                 // Play sound
                 if (gameState.soundEffects) {
+                    stopAllSounds();
                     audio.lose.play().catch(e => console.log('Audio play prevented:', e));
                 }
 
@@ -1038,6 +1045,20 @@
             }
         }
 
+        // Save theme setting to localStorage
+        function saveTheme() {
+            localStorage.setItem('higherLowerTheme', gameState.theme);
+        }
+
+        // Load theme setting from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('higherLowerTheme');
+            if (savedTheme) {
+                gameState.theme = savedTheme;
+                document.body.classList.toggle('light-mode', gameState.theme === 'light');
+            }
+        }
+
         // Export game progress as a string
         function exportGameProgress() {
             const exportData = btoa(JSON.stringify(gameState));
@@ -1078,7 +1099,11 @@
         // Toggle theme between light and dark
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
+            gameState.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            saveTheme();
+
             if (gameState.soundEffects) {
+                stopAllSounds();
                 audio.button.play().catch(e => console.log('Audio play prevented:', e));
             }
         }
@@ -1089,6 +1114,7 @@
             elements.overlay.classList.toggle('active');
 
             if (gameState.soundEffects) {
+                stopAllSounds();
                 audio.button.play().catch(e => console.log('Audio play prevented:', e));
             }
         }
@@ -1108,6 +1134,7 @@
             saveGameState();
 
             if (gameState.soundEffects) {
+                stopAllSounds();
                 audio.button.play().catch(e => console.log('Audio play prevented:', e));
             }
         }
@@ -1163,6 +1190,7 @@
             elements.betAmount.value = Math.min(currentBet * 2, gameState.coins);
 
             if (gameState.soundEffects) {
+                stopAllSounds();
                 audio.button.play().catch(e => console.log('Audio play prevented:', e));
             }
         }

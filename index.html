@@ -845,18 +845,19 @@
 
         // Audio elements
         const audio = {
-            win: new Audio('win.mp3'),
-            lose: new Audio('lose.mp3'),
-            button: new Audio('button.mp3'),
-            background: new Audio('background.mp3')
-        };
+        win: new Audio('win.mp3'),
+        lose: new Audio('lose.mp3'),
+        button: new Audio('button.mp3'),
+        background: new Audio('background.mp3')
+    };
 
-        // Set audio properties
-        Object.values(audio).forEach(sound => {
-            sound.volume = gameState.volume;
-        });
+    // Set audio properties
+    Object.values(audio).forEach(sound => {
+        sound.volume = 0.4; // Set volume to 40%
+        sound.autoplay = true; // Autoplay audio
+    });
 
-        audio.background.loop = true;
+    audio.background.loop = true;
 
         // Initialize game
         function initGame() {

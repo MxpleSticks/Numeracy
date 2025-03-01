@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeracy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #ffffff;
+            --bg-dark: #1e1e1e;
+            --text-light: #1e1e1e;
+            --text-dark: #ffffff;
+            --accent-light: #f0f0f0;
+            --accent-dark: #2a2a2a;
+            --border-light: #d0d0d0;
+            --border-dark: #3a3a3a;
+            --success: #4CAF50;
+            --error: #F44336;
+            --warning: #FFC107;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body.light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .theme-switch-container {
+            margin-right: 20px;
+            /* Adjust spacing as needed */
+        }
+
+        .coin-display-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        #app {
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            margin-top: 80px;
+            /* Adjust to ensure space for top elements */
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+        }
+
+        .theme-switch {
+            width: 50px;
+            height: 26px;
+            background-color: var(--accent-dark);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid var(--border-dark);
+        }
+
+        .light-mode .theme-switch {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .theme-switch:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--text-dark);
+            top: 2px;
+            left: 3px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .light-mode .theme-switch:after {
+            transform: translateX(24px);
+            background-color: var(--text-light);
+        }
+
+        .coin-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--accent-dark);
+            border: 1px solid var(--border-dark);
+            font-weight: 600;
+        }
+
+        .light-mode .coin-display {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .coin-icon {
+            margin-right: 6px;
+            color: var(--warning);
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .light-mode .settings-btn {
+            color: var(--text-light);
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+        }
+
+        .number-display {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .streak-indicator {
+            position: absolute;
+            right: -30px;
+            top: 0;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: var(--warning);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .streak-indicator.active {
+            opacity: 1;
+        }
+
+        .flame-icon {
+            margin-right: 4px;
+        }
+
+        .bet-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .bet-amount {
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bet-input {
+            width: 120px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--accent-dark);
+            color: var(--text-dark);
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .light-mode .bet-input {
+            border: 1px solid var(--border-light);
+            background-color: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .bet-btn {
+            padding: 10px 0;
+            width: 120px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--accent-dark);
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            font-family: 'Inter', sans-serif;
+            margin: 0 5px;
+        }
+
+        .light-mode .bet-btn {
+            border: 1px solid var(--border-light);
+            background-color: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .bet-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .bet-btn:active {
+            transform: translateY(1px);
+        }
+
+        .bet-actions {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .power-up-btn {
+            background: none;
+            border: none;
+            color: var(--warning);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .power-up-btn:hover {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background-color: var(--accent-dark);
+            border: 1px solid var(--border-dark);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+            text-align: center;
+            max-width: 80%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .light-mode .notification {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .notification-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .notification-message {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .notification-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--warning);
+            color: #000;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .notification-btn:hover {
+            background-color: #e6b000;
+        }
+
+        .stats-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background-color: var(--bg-dark);
+            border-left: 1px solid var(--border-dark);
+            transition: right 0.3s;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .light-mode .settings-panel {
+            background-color: var(--bg-light);
+            border-left: 1px solid var(--border-light);
+        }
+
+        .settings-panel.open {
+            right: 0;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 10px;
+        }
+
+        .light-mode .settings-header {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .close-settings {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .light-mode .close-settings {
+            color: var(--text-light);
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .settings-label {
+            font-size: 14px;
+        }
+
+        .radio-group {
+            display: flex;
+        }
+
+        .radio-option {
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input {
+            margin-right: 4px;
+        }
+
+        .export-import {
+            margin-top: 20px;
+        }
+
+        .export-btn,
+        .import-btn,
+        .reset-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--accent-dark);
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .light-mode .export-btn,
+        .light-mode .import-btn,
+        .light-mode .reset-btn {
+            border: 1px solid var(--border-light);
+            background-color: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .import-textarea {
+            width: 100%;
+            height: 80px;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--accent-dark);
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            display: none;
+        }
+
+        .light-mode .import-textarea {
+            border: 1px solid var(--border-light);
+            background-color: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .show-textarea {
+            display: block;
+        }
+
+        .difficulty-options {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 8px 0;
+            margin: 0 5px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dark);
+            background-color: var(--accent-dark);
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .light-mode .difficulty-btn {
+            border: 1px solid var(--border-light);
+            background-color: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .difficulty-btn.active {
+            background-color: var(--warning);
+            color: #000;
+            border-color: var(--warning);
+        }
+
+        .result-indicator {
+            position: absolute;
+            top: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .result-indicator.success {
+            color: var(--success);
+        }
+
+        .result-indicator.error {
+            color: var(--error);
+        }
+
+        .result-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .custom-range-slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .range-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .range-input {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background-color: var(--accent-dark);
+            outline: none;
+        }
+
+        .light-mode .range-input {
+            background-color: var(--accent-light);
+        }
+
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--warning);
+            cursor: pointer;
+        }
+
+        .range-input::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--warning);
+            cursor: pointer;
+            border: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 480px) {
+            .number-display {
+                font-size: 36px;
+            }
+
+            .bet-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .bet-btn {
+                margin: 5px 0;
+                width: 100%;
+            }
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+            margin-top: 12px;
+            /* Adjust this value as needed */
+        }
+
+        .subtitle {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .subtitle a {
+            color: var(--warning);
+            text-decoration: none;
+        }
+
+        .subtitle a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-container">
+        <div class="theme-switch-container">
+            <div class="theme-switch" id="themeSwitch"></div>
+        </div>
+        <button class="settings-btn" id="settingsBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 15.5C13.933 15.5 15.5 13.933 15.5 12C15.5 10.067 13.933 8.5 12 8.5C10.067 8.5 8.5 10.067 8.5 12C8.5 13.933 10.067 15.5 12 15.5Z"
+                    stroke="currentColor" stroke-width="2" transform="translate(0, 2)" />
+                <path
+                    d="M19.4 12.9C19.4 12.6 19.4 12.3 19.4 12C19.4 11.7 19.4 11.4 19.4 11.1L21.3 9.5C21.6 9.3 21.7 8.9 21.4 8.5L19.7 5.8C19.5 5.5 19 5.5 18.7 5.6L16.3 7C15.7 6.7 15.2 6.5 14.7 6.3L14.3 3.7C14.3 3.3 14 3 13.6 3H10.3C9.9 3 9.6 3.3 9.6 3.7L9.2 6.3C8.7 6.5 8.2 6.7 7.6 7L5.3 5.6C5 5.5 4.5 5.5 4.3 5.8L2.6 8.5C2.3 8.9 2.4 9.3 2.7 9.5L4.6 11.1C4.6 11.4 4.6 11.7 4.6 12C4.6 12.3 4.6 12.6 4.6 12.9L2.7 14.5C2.4 14.7 2.3 15.1 2.6 15.5L4.3 18.2C4.5 18.5 5 18.5 5.3 18.4L7.6 17C8.2 17.3 8.7 17.5 9.2 17.7L9.6 20.3C9.6 20.7 9.9 21 10.3 21H13.6C14 21 14.3 20.7 14.3 20.3L14.7 17.7C15.2 17.5 15.7 17.3 16.3 17L18.7 18.4C19 18.5 19.5 18.5 19.7 18.2L21.4 15.5C21.7 15.1 21.6 14.7 21.3 14.5L19.4 12.9Z"
+                    stroke="currentColor" stroke-width="2" transform="translate(0, 2)" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="title">Numeracy</div>
+    <div class="subtitle">
+        made by: <a href="https://github.com/MapleSticks" target="_blank">MapleSticks</a>
+    </div>
+
+    <div class="coin-display-container">
+        <div class="coin-display">
+            <span class="coin-icon">🪙</span>
+            <span id="coinBalance">100</span>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="game-container">
+            <div class="result-indicator" id="resultIndicator"></div>
+
+            <div class="number-display">
+                <span id="currentNumber">--</span>/<span id="maxNumber">100</span>
+                <div class="streak-indicator" id="streakIndicator">
+                    <span class="flame-icon">🔥</span>
+                    <span id="streakCount">0</span>
+                </div>
+            </div>
+
+            <div class="bet-container">
+                <div class="bet-amount">
+                    <input type="number" class="bet-input" id="betAmount" min="1" step="1" value="10" />
+                </div>
+
+                <div class="bet-actions">
+                    <button class="bet-btn" id="lowerBtn">Lower</button>
+                    <button class="bet-btn" id="higherBtn">Higher</button>
+                </div>
+
+                <button class="power-up-btn" id="powerUpBtn">Double or Nothing 💥</button>
+            </div>
+        </div>
+
+        <div class="stats-display">
+            <div>Best Streak: <span id="bestStreak">0</span></div>
+            <div>Highest Coins: <span id="highestCoins">100</span></div>
+        </div>
+
+        <div class="notification" id="notification">
+            <div class="notification-title" id="notificationTitle">Title</div>
+            <div class="notification-message" id="notificationMessage">Message</div>
+            <button class="notification-btn" id="notificationBtn">OK</button>
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button class="close-settings" id="closeSettings">✕</button>
+            </div>
+
+            <div class="settings-section">
+                <h3>Difficulty</h3>
+                <div class="difficulty-options">
+                    <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                    <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Sound</h3>
+                <div class="settings-option">
+                    <span class="settings-label">Sound Effects</span>
+                    <label class="switch">
+                        <input type="checkbox" id="soundEffects" checked>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span class="settings-label">Background Music</span>
+                    <label class="switch">
+                        <input type="checkbox" id="backgroundMusic" checked>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span class="settings-label">Volume</span>
+                </div>
+                <div class="custom-range-slider">
+                    <div class="range-label">
+                        <span>0%</span>
+                        <span>100%</span>
+                    </div>
+                    <input type="range" class="range-input" id="volumeSlider" min="0" max="100" value="70">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Power-ups</h3>
+                <div class="settings-option">
+                    <span class="settings-label">Double or Nothing</span>
+                    <label class="switch">
+                        <input type="checkbox" id="doubleNothingEnabled" checked>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Starting Coins</h3>
+                <div class="custom-range-slider">
+                    <div class="range-label">
+                        <span>50</span>
+                        <span>200</span>
+                    </div>
+                    <input type="range" class="range-input" id="startingCoinsSlider" min="50" max="200" step="1"
+                        value="100">
+                </div>
+                <div style="text-align: center; margin-top: 5px;">
+                    <span id="startingCoinsValue">100</span>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Reset Game</h3>
+                <button class="reset-btn" id="resetBtn">Reset to 75 Coins</button>
+            </div>
+
+            <div class="export-import">
+                <button class="export-btn" id="exportBtn">Export Progress</button>
+                <button class="import-btn" id="importBtn">Import Progress</button>
+                <textarea class="import-textarea" id="importTextarea"
+                    placeholder="Paste your game data here..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            coins: 100,
+            currentNumber: null,
+            maxNumber: 100,
+            streak: 0,
+            bestStreak: 0,
+            highestCoins: 100,
+            difficulty: 'easy',
+            doubleOrNothing: false,
+            soundEffects: true,
+            backgroundMusic: true,
+            volume: 0.7,
+            startingCoins: 100
+        };
+
+        // DOM Elements
+        const elements = {
+            themeSwitch: document.getElementById('themeSwitch'),
+            coinBalance: document.getElementById('coinBalance'),
+            currentNumber: document.getElementById('currentNumber'),
+            maxNumber: document.getElementById('maxNumber'),
+            streakIndicator: document.getElementById('streakIndicator'),
+            streakCount: document.getElementById('streakCount'),
+            betAmount: document.getElementById('betAmount'),
+            lowerBtn: document.getElementById('lowerBtn'),
+            higherBtn: document.getElementById('higherBtn'),
+            powerUpBtn: document.getElementById('powerUpBtn'),
+            bestStreak: document.getElementById('bestStreak'),
+            highestCoins: document.getElementById('highestCoins'),
+            notification: document.getElementById('notification'),
+            notificationTitle: document.getElementById('notificationTitle'),
+            notificationMessage: document.getElementById('notificationMessage'),
+            notificationBtn: document.getElementById('notificationBtn'),
+            settingsBtn: document.getElementById('settingsBtn'),
+            settingsPanel: document.getElementById('settingsPanel'),
+            closeSettings: document.getElementById('closeSettings'),
+            overlay: document.getElementById('overlay'),
+            difficultyBtns: document.querySelectorAll('.difficulty-btn'),
+            soundEffects: document.getElementById('soundEffects'),
+            backgroundMusic: document.getElementById('backgroundMusic'),
+            volumeSlider: document.getElementById('volumeSlider'),
+            doubleNothingEnabled: document.getElementById('doubleNothingEnabled'),
+            exportBtn: document.getElementById('exportBtn'),
+            importBtn: document.getElementById('importBtn'),
+            importTextarea: document.getElementById('importTextarea'),
+            resultIndicator: document.getElementById('resultIndicator'),
+            startingCoinsSlider: document.getElementById('startingCoinsSlider'),
+            startingCoinsValue: document.getElementById('startingCoinsValue'),
+            resetBtn: document.getElementById('resetBtn')
+        };
+
+        // Audio elements
+        const audio = {
+            win: new Audio('win.mp3'),
+            lose: new Audio('lose.mp3'),
+            button: new Audio('button.mp3'),
+            background: new Audio('background.mp3')
+        };
+
+        // Set audio properties
+        Object.values(audio).forEach(sound => {
+            sound.volume = gameState.volume;
+        });
+
+        audio.background.loop = true;
+
+        // Initialize game
+        function initGame() {
+            loadGameState();
+            generateNumber();
+            updateUI();
+
+            // Set initial bet amount to 10% of coins
+            elements.betAmount.value = Math.max(1, Math.floor(gameState.coins * 0.1));
+            elements.betAmount.max = gameState.coins;
+
+            // Start background music if enabled
+            if (gameState.backgroundMusic) {
+                audio.background.play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+
+        // Generate a random number based on difficulty
+        function generateNumber() {
+            let min = 1;
+            let max = gameState.maxNumber;
+            let randomNumber;
+
+            switch (gameState.difficulty) {
+                case 'easy':
+                    // In easy mode, numbers are more evenly distributed
+                    randomNumber = Math.random();
+                    break;
+                case 'medium':
+                    // In medium mode, numbers tend to cluster more
+                    randomNumber = (Math.random() + Math.random()) / 2;
+                    break;
+                case 'hard':
+                    // In hard mode, numbers are more likely to be at extremes
+                    randomNumber = Math.random() < 0.5 ?
+                        Math.random() * 0.4 : 0.6 + (Math.random() * 0.4);
+                    break;
+            }
+
+            gameState.currentNumber = Math.floor(randomNumber * max) + min;
+        }
+
+        // Process the player's bet
+        function placeBet(betType) {
+            const betAmount = parseInt(elements.betAmount.value);
+
+            // Validate bet amount
+            if (isNaN(betAmount) || betAmount <= 0 || betAmount > gameState.coins) {
+                showNotification('Invalid Bet', 'Please enter a valid bet amount.', 'OK');
+                return;
+            }
+
+            // Generate new number
+            const oldNumber = gameState.currentNumber;
+            generateNumber();
+            const newNumber = gameState.currentNumber;
+
+            // Determine if player won
+            let won = false;
+            if (betType === 'higher' && newNumber > oldNumber) {
+                won = true;
+            } else if (betType === 'lower' && newNumber < oldNumber) {
+                won = true;
+            }
+
+            // Apply result
+            if (won) {
+                // Calculate winnings (double bet for normal, more for streak)
+                let winnings = betAmount;
+
+                // Apply difficulty multiplier
+                let difficultyMultiplier = 1;
+                switch (gameState.difficulty) {
+                    case 'medium':
+                        difficultyMultiplier = 1.5;
+                        break;
+                    case 'hard':
+                        difficultyMultiplier = 2;
+                        break;
+                }
+
+                winnings *= difficultyMultiplier;
+
+                // Apply streak bonus (10% extra per streak level)
+                if (gameState.streak > 0) {
+                    winnings += Math.floor(betAmount * (gameState.streak * 0.1));
+                }
+
+                gameState.coins += winnings;
+                gameState.streak++;
+
+                // Update best streak if needed
+                if (gameState.streak > gameState.bestStreak) {
+                    gameState.bestStreak = gameState.streak;
+                }
+
+                // Update highest coins if needed
+                if (gameState.coins > gameState.highestCoins) {
+                    gameState.highestCoins = gameState.coins;
+                }
+
+                // Show result
+                showResult(true, `+${winnings}`);
+
+                // Play sound
+                if (gameState.soundEffects) {
+                    audio.win.play().catch(e => console.log('Audio play prevented:', e));
+                }
+            } else {
+                gameState.coins -= betAmount;
+                gameState.streak = 0;
+
+                // Show result
+                showResult(false, `-${betAmount}`);
+
+                // Play sound
+                if (gameState.soundEffects) {
+                    audio.lose.play().catch(e => console.log('Audio play prevented:', e));
+                }
+
+                // Check if player is out of coins
+                if (gameState.coins <= 0) {
+                    handleGameOver();
+                }
+            }
+
+            // Update the UI
+            updateUI();
+            saveGameState();
+        }
+
+        // Handle game over (player out of coins)
+        function handleGameOver() {
+            // Reset to starting coins with a penalty
+            const resetAmount = Math.floor(gameState.startingCoins * 0.75);
+            showNotification('Game Over!', `You ran out of coins! Resetting to ${resetAmount} coins.`, 'Continue');
+
+            gameState.coins = resetAmount;
+        }
+
+        // Show result indicator (win/lose)
+        function showResult(success, text) {
+            elements.resultIndicator.textContent = text;
+            elements.resultIndicator.className = 'result-indicator';
+            elements.resultIndicator.classList.add(success ? 'success' : 'error');
+            elements.resultIndicator.classList.add('show');
+
+            setTimeout(() => {
+                elements.resultIndicator.classList.remove('show');
+            }, 1500);
+        }
+
+        // Show a notification popup
+        function showNotification(title, message, buttonText) {
+            elements.notificationTitle.textContent = title;
+            elements.notificationMessage.textContent = message;
+            elements.notificationBtn.textContent = buttonText;
+            elements.notification.classList.add('show');
+        }
+
+        // Hide the notification popup
+        function hideNotification() {
+            elements.notification.classList.remove('show');
+        }
+
+        // Save game state to localStorage
+        function saveGameState() {
+            const saveData = JSON.stringify(gameState);
+            localStorage.setItem('higherLowerGameState', saveData);
+        }
+
+        // Load game state from localStorage
+        function loadGameState() {
+            const savedData = localStorage.getItem('higherLowerGameState');
+            if (savedData) {
+                const loadedState = JSON.parse(savedData);
+                Object.assign(gameState, loadedState);
+            }
+        }
+
+        // Export game progress as a string
+        function exportGameProgress() {
+            const exportData = btoa(JSON.stringify(gameState));
+            elements.importTextarea.value = exportData;
+            elements.importTextarea.classList.add('show-textarea');
+            elements.importTextarea.select();
+            document.execCommand('copy');
+
+            showNotification('Export Successful', 'Game data copied to clipboard!', 'OK');
+        }
+
+        // Import game progress from a string
+        function importGameProgress() {
+            if (elements.importTextarea.classList.contains('show-textarea')) {
+                try {
+                    const importData = elements.importTextarea.value;
+                    const decodedData = JSON.parse(atob(importData));
+
+                    // Validate imported data
+                    if (decodedData.coins === undefined || decodedData.maxNumber === undefined) {
+                        throw new Error('Invalid game data');
+                    }
+
+                    Object.assign(gameState, decodedData);
+                    saveGameState();
+                    updateUI();
+
+                    elements.importTextarea.classList.remove('show-textarea');
+                    showNotification('Import Successful', 'Game data imported successfully!', 'OK');
+                } catch (error) {
+                    showNotification('Import Failed', 'Invalid game data. Please check and try again.', 'OK');
+                }
+            } else {
+                elements.importTextarea.classList.add('show-textarea');
+            }
+        }
+
+        // Toggle theme between light and dark
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            if (gameState.soundEffects) {
+                audio.button.play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+
+        // Toggle settings panel
+        function toggleSettings() {
+            elements.settingsPanel.classList.toggle('open');
+            elements.overlay.classList.toggle('active');
+
+            if (gameState.soundEffects) {
+                audio.button.play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+
+        // Set difficulty level
+        function setDifficulty(difficulty) {
+            gameState.difficulty = difficulty;
+
+            elements.difficultyBtns.forEach(btn => {
+                if (btn.dataset.difficulty === difficulty) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            saveGameState();
+
+            if (gameState.soundEffects) {
+                audio.button.play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+
+        // Toggle Double or Nothing power-up
+        function toggleDoubleOrNothing() {
+            gameState.doubleOrNothing = elements.doubleNothingEnabled.checked;
+            updateUI();
+            saveGameState();
+        }
+
+        // Update sound effects setting
+        function updateSoundEffects() {
+            gameState.soundEffects = elements.soundEffects.checked;
+            saveGameState();
+        }
+
+        // Update background music setting
+        function updateBackgroundMusic() {
+            gameState.backgroundMusic = elements.backgroundMusic.checked;
+
+            if (gameState.backgroundMusic) {
+                audio.background.play().catch(e => console.log('Audio play prevented:', e));
+            } else {
+                audio.background.pause();
+            }
+
+            saveGameState();
+        }
+
+        // Update volume setting
+        function updateVolume() {
+            gameState.volume = elements.volumeSlider.value / 100;
+
+            Object.values(audio).forEach(sound => {
+                sound.volume = gameState.volume;
+            });
+
+            saveGameState();
+        }
+
+        // Update starting coins
+        function updateStartingCoins() {
+            gameState.startingCoins = parseInt(elements.startingCoinsSlider.value);
+            elements.startingCoinsValue.textContent = gameState.startingCoins;
+            saveGameState();
+        }
+
+        // Use Double or Nothing power-up
+        function useDoubleOrNothing() {
+            // Double the current bet amount
+            const currentBet = parseInt(elements.betAmount.value);
+            elements.betAmount.value = Math.min(currentBet * 2, gameState.coins);
+
+            if (gameState.soundEffects) {
+                audio.button.play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+
+        // Reset game state to 75 coins
+        function resetGame() {
+            gameState.coins = 75;
+            gameState.currentNumber = null;
+            gameState.streak = 0;
+            gameState.bestStreak = 0;
+            gameState.highestCoins = 75;
+            generateNumber();
+            updateUI();
+            saveGameState();
+            showNotification('Game Reset', 'The game has been reset to 75 coins.', 'OK');
+        }
+
+        // Update the UI to reflect current game state
+        function updateUI() {
+            elements.coinBalance.textContent = gameState.coins;
+            elements.currentNumber.textContent = gameState.currentNumber !== null ? gameState.currentNumber : '--';
+            elements.maxNumber.textContent = gameState.maxNumber;
+            elements.bestStreak.textContent = gameState.bestStreak;
+            elements.highestCoins.textContent = gameState.highestCoins;
+
+            // Update streak display
+            elements.streakCount.textContent = gameState.streak;
+            if (gameState.streak > 0) {
+                elements.streakIndicator.classList.add('active');
+            } else {
+                elements.streakIndicator.classList.remove('active');
+            }
+
+            // Update bet amount max
+            elements.betAmount.max = gameState.coins;
+            if (parseInt(elements.betAmount.value) > gameState.coins) {
+                elements.betAmount.value = gameState.coins;
+            }
+
+            // Set power-up button visibility
+            elements.powerUpBtn.style.display = gameState.doubleOrNothing ? 'block' : 'none';
+
+            // Update settings panel
+            elements.soundEffects.checked = gameState.soundEffects;
+            elements.backgroundMusic.checked = gameState.backgroundMusic;
+            elements.volumeSlider.value = gameState.volume * 100;
+            elements.doubleNothingEnabled.checked = gameState.doubleOrNothing;
+            elements.startingCoinsSlider.value = gameState.startingCoins;
+            elements.startingCoinsValue.textContent = gameState.startingCoins;
+
+            // Set difficulty button states
+            elements.difficultyBtns.forEach(btn => {
+                if (btn.dataset.difficulty === gameState.difficulty) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Theme switch
+            elements.themeSwitch.addEventListener('click', toggleTheme);
+
+            // Betting
+            elements.lowerBtn.addEventListener('click', () => placeBet('lower'));
+            elements.higherBtn.addEventListener('click', () => placeBet('higher'));
+
+            // Power-up
+            elements.powerUpBtn.addEventListener('click', useDoubleOrNothing);
+
+            // Settings
+            elements.settingsBtn.addEventListener('click', toggleSettings);
+            elements.closeSettings.addEventListener('click', toggleSettings);
+            elements.overlay.addEventListener('click', toggleSettings);
+
+            // Notification
+            elements.notificationBtn.addEventListener('click', hideNotification);
+
+            // Difficulty buttons
+            elements.difficultyBtns.forEach(btn => {
+                btn.addEventListener('click', () => setDifficulty(btn.dataset.difficulty));
+            });
+
+            // Settings controls
+            elements.soundEffects.addEventListener('change', updateSoundEffects);
+            elements.backgroundMusic.addEventListener('change', updateBackgroundMusic);
+            elements.volumeSlider.addEventListener('input', updateVolume);
+            elements.doubleNothingEnabled.addEventListener('change', toggleDoubleOrNothing);
+            elements.startingCoinsSlider.addEventListener('input', updateStartingCoins);
+
+            // Export/Import
+            elements.exportBtn.addEventListener('click', exportGameProgress);
+            elements.importBtn.addEventListener('click', importGameProgress);
+
+            // Bet amount validation
+            elements.betAmount.addEventListener('input', () => {
+                const value = parseInt(elements.betAmount.value);
+                if (value > gameState.coins) {
+                    elements.betAmount.value = gameState.coins;
+                } else if (value < 1) {
+                    elements.betAmount.value = 1;
+                }
+            });
+
+            // Reset button
+            elements.resetBtn.addEventListener('click', resetGame);
+        }
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            initGame();
+        });
+    </script>
+</body>
+
+</html>

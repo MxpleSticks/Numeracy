@@ -61,8 +61,8 @@
 
         .coin-display-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 60px;
         }
 
         #app {
@@ -154,7 +154,7 @@
         }
 
         .light-mode .settings-btn {
-            color: var(--text-light);
+            color: var (--text-light);
         }
 
         .game-container {
@@ -289,7 +289,7 @@
             border: 1px solid var(--border-dark);
             padding: 20px;
             border-radius: 10px;
-            z-index: 100;
+            z-index: 2000;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
@@ -465,7 +465,7 @@
             margin-top: 10px;
             padding: 8px;
             border-radius: 8px;
-            border: 1px solid var(--border-dark);
+            border: 1px solid var (--border-dark);
             background-color: var(--accent-dark);
             color: var(--text-dark);
             font-family: 'Inter', sans-serif;
@@ -487,12 +487,14 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
+            gap: 10px;
+            /* Add consistent gap */
         }
 
         .difficulty-btn {
-            flex: 1;
             padding: 8px 0;
-            margin: 0 5px;
+            flex: 1;
+            /* Make buttons take equal space */
             border-radius: 8px;
             border: 1px solid var(--border-dark);
             background-color: var(--accent-dark);
@@ -500,8 +502,12 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             font-family: 'Inter', sans-serif;
+            min-width: 0;
+            /* Prevent overflow */
+            /* Remove margin since we're using gap */
+            margin: 0;
         }
 
         .light-mode .difficulty-btn {
@@ -639,6 +645,181 @@
         .subtitle a:hover {
             text-decoration: underline;
         }
+
+        .shop-button-container {
+            position: fixed;
+            top: 15px;
+            right: 10px;
+            /* Increased from 120px to avoid overlap */
+        }
+
+        .shop-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            width: 40px;
+            /* Add fixed width */
+            height: 40px;
+            /* Add fixed height */
+            display: flex;
+            /* Add flex display */
+            align-items: center;
+            /* Center vertically */
+            justify-content: center;
+            /* Center horizontally */
+            border-radius: 8px;
+            /* Adjust border radius to match other buttons */
+            background-color: var(--accent-dark);
+            border: 1px solid var(--border-dark);
+            color: var(--text-dark);
+            transition: transform 0.2s;
+        }
+
+        /* Update the SVG size to fit nicely in the square button */
+        .shop-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .light-mode .shop-btn {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+            color: var(--text-light);
+        }
+
+        .shop-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .shop-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 400px;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .light-mode .shop-panel {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .shop-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-shop {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .light-mode .close-shop {
+            color: var(--text-light);
+        }
+
+        .shop-items {
+            display: grid;
+            gap: 15px;
+        }
+
+        .shop-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--accent-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+        }
+
+        .light-mode .shop-item {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .item-icon {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .item-details p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .buy-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--warning);
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .buy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .premium-btn {
+            font-weight: bold;
+        }
+
+        .trophy-display {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background-color: var (--accent-dark);
+            border: 1px solid var(--border-dark);
+            border-radius: 20px;
+            color: var(--warning);
+        }
+
+        .light-mode .trophy-display {
+            background-color: var(--accent-light);
+            border: 1px solid var(--border-light);
+        }
     </style>
 </head>
 
@@ -671,6 +852,51 @@
         </div>
     </div>
 
+    <div class="shop-button-container">
+        <button class="shop-btn" id="shopBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10V8C4 7.44772 4.44772 7 5 7H19C19.5523 7 20 7.44772 20 8V10" stroke="currentColor"
+                    stroke-width="2" />
+                <path d="M20 10L17.5 22H6.5L4 10" stroke="currentColor" stroke-width="2" />
+                <path d="M8 13C8 13 8 16 12 16C16 16 16 13 16 13" stroke="currentColor" stroke-width="2" />
+            </svg>
+        </button>
+
+    </div>
+
+    <div class="shop-panel" id="shopPanel">
+        <div class="shop-header">
+            <h2>Shop</h2>
+            <button class="close-shop" id="closeShop">✕</button>
+        </div>
+        <div class="shop-items">
+            <div class="shop-item" id="streakShield">
+                <div class="item-icon">🛡️</div>
+                <div class="item-details">
+                    <h3>Streak Shield</h3>
+                    <p>Protects your streak if you lose</p>
+                    <button class="buy-btn" data-item="streakShield">Buy for <span class="price">50</span> 🪙</button>
+                </div>
+            </div>
+            <div class="shop-item" id="trophy">
+                <div class="item-icon">🏆</div>
+                <div class="item-details">
+                    <h3>Trophy</h3>
+                    <p>Display your achievements</p>
+                    <button class="buy-btn" data-item="trophy">Buy for <span class="price">20</span> 🪙</button>
+                </div>
+            </div>
+            <div class="shop-item" id="streakExtender">
+                <div class="item-icon">📈</div>
+                <div class="item-details">
+                    <h3>Streak Extender</h3>
+                    <p>+1 to streak on every win</p>
+                    <button class="buy-btn" data-item="streakExtender">Buy for 250,000 🪙</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="app">
         <div class="game-container">
             <div class="result-indicator" id="resultIndicator"></div>
@@ -700,6 +926,17 @@
         <div class="stats-display">
             <div>Best Streak: <span id="bestStreak">0</span></div>
             <div>Highest Coins: <span id="highestCoins">100</span></div>
+        </div>
+
+        <div class="trophy-display" id="trophyDisplay" style="display: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15.5L8 12.5V5.5H16V12.5L12 15.5Z" stroke="currentColor" stroke-width="2" />
+                <path d="M8 5.5H4V8.5C4 10.5 6 11.5 8 11.5" stroke="currentColor" stroke-width="2" />
+                <path d="M16 5.5H20V8.5C20 10.5 18 11.5 16 11.5" stroke="currentColor" stroke-width="2" />
+                <path d="M9 15.5V17.5H15V15.5" stroke="currentColor" stroke-width="2" />
+                <path d="M10 17.5V19.5H14V17.5" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <span id="trophyCount">0</span>
         </div>
 
         <div class="notification" id="notification">
@@ -805,7 +1042,10 @@
             backgroundMusic: true,
             volume: 0.7,
             startingCoins: 100,
-            theme: 'dark'
+            theme: 'dark',
+            streakShields: 0,
+            trophies: 0,
+            streakExtenderOwned: false
         };
 
         // DOM Elements
@@ -866,6 +1106,30 @@
             Object.values(audio).forEach(sound => sound.currentTime = 0);
         }
 
+        // Add this function after the audio declarations
+        function initAudio() {
+            // Create an audio context
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+
+            // Function to enable audio
+            async function enableAudio() {
+                if (audioCtx.state === 'suspended') {
+                    await audioCtx.resume();
+                }
+                if (gameState.backgroundMusic) {
+                    try {
+                        await audio.background.play();
+                    } catch (e) {
+                        console.log('Audio play prevented:', e);
+                    }
+                }
+            }
+
+            // Add click handler to enable audio
+            document.addEventListener('click', enableAudio, { once: true });
+        }
+
         // Initialize game
         // Initialize game
         function initGame() {
@@ -873,6 +1137,7 @@
             loadTheme();
             generateNumber();
             updateUI();
+            initAudio(); // Add this line
 
             // Set initial bet amount to 10% of coins
             elements.betAmount.value = Math.max(1, Math.floor(gameState.coins * 0.1));
@@ -884,7 +1149,7 @@
             }
         }
 
-        // Generate a random number based on difficulty
+        // Update generateNumber function
         function generateNumber() {
             let min = 1;
             let max = gameState.maxNumber;
@@ -895,12 +1160,15 @@
                     randomNumber = Math.random();
                     break;
                 case 'medium':
-                    randomNumber = (Math.random() + Math.random()) / 2;
+                    randomNumber = Math.random() < 0.5 ?
+                        Math.random() * 0.4 :
+                        0.6 + (Math.random() * 0.4);
                     break;
                 case 'hard':
-                    randomNumber = Math.random() < 0.5 ?
-                        Math.random() * 0.4 : 0.6 + (Math.random() * 0.4);
+                    randomNumber = (Math.random() + Math.random() + Math.random()) / 3;
                     break;
+                default:
+                    randomNumber = Math.random();
             }
 
             gameState.currentNumber = Math.floor(randomNumber * max) + min;
@@ -943,6 +1211,9 @@
                     case 'hard':
                         difficultyMultiplier = 2;
                         break;
+                    case 'premium':
+                        difficultyMultiplier = 10; // 10x reward for premium mode
+                        break;
                 }
 
                 winnings *= difficultyMultiplier;
@@ -974,22 +1245,18 @@
                     audio.win.play().catch(e => console.log('Audio play prevented:', e));
                 }
             } else {
-                gameState.coins -= betAmount;
-                gameState.streak = 0;
-
-                // Show result
-                showResult(false, `-${betAmount}`);
-
-                // Play sound
-                if (gameState.soundEffects) {
-                    stopAllSounds();
-                    audio.lose.play().catch(e => console.log('Audio play prevented:', e));
+                if (gameState.streakShields > 0) {
+                    gameState.streakShields--;
+                    gameState.coins -= betAmount;
+                    showNotification('Streak Shield Used', 'Your streak was protected!', 'OK');
+                } else {
+                    gameState.coins -= betAmount;
+                    gameState.streak = 0;
                 }
+            }
 
-                // Check if player is out of coins
-                if (gameState.coins <= 0) {
-                    handleGameOver();
-                }
+            if (won && gameState.streakExtenderOwned) {
+                gameState.streak++; // Extra streak point from streak extender
             }
 
             // Update the UI
@@ -1158,6 +1425,7 @@
             gameState.backgroundMusic = elements.backgroundMusic.checked;
 
             if (gameState.backgroundMusic) {
+                audio.background.currentTime = 0; // Reset the audio to start
                 audio.background.play().catch(e => console.log('Audio play prevented:', e));
             } else {
                 audio.background.pause();
@@ -1250,6 +1518,19 @@
                     btn.classList.remove('active');
                 }
             });
+
+            // Update premium difficulty button visibility
+            const premiumBtn = document.querySelector('.premium-btn');
+            if (premiumBtn) {
+                premiumBtn.style.display = gameState.premiumUnlocked ? 'block' : 'none';
+            }
+
+            // Update trophy display
+            const trophyDisplay = document.getElementById('trophyDisplay');
+            if (trophyDisplay) {
+                trophyDisplay.style.display = gameState.trophies > 0 ? 'flex' : 'none';
+                document.getElementById('trophyCount').textContent = gameState.trophies;
+            }
         }
 
         // Event Listeners
@@ -1300,6 +1581,79 @@
 
             // Reset button
             elements.resetBtn.addEventListener('click', resetGame);
+
+            // Shop
+            document.getElementById('shopBtn').addEventListener('click', toggleShop);
+            document.getElementById('closeShop').addEventListener('click', toggleShop);
+
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', () => buyItem(btn.dataset.item));
+            });
+        }
+
+        function toggleShop() {
+            const shopPanel = document.getElementById('shopPanel');
+            const overlay = document.getElementById('overlay');
+            shopPanel.classList.toggle('open');
+            overlay.classList.toggle('active');
+            updateShopPrices();
+        }
+
+        function updateShopPrices() {
+            // Update Streak Shield price to 10% of player's coins
+            const shieldPrice = Math.max(1, Math.floor(gameState.coins * 0.1));
+            document.querySelector('#streakShield .price').textContent = shieldPrice;
+
+            // Update Trophy price
+            const trophyPrice = Math.floor(20 * Math.pow(6, Math.min(gameState.trophies, 10)) *
+                (gameState.trophies >= 10 ? (1 + (gameState.trophies - 10) * 0.1) : 1));
+            document.querySelector('#trophy .price').textContent = trophyPrice;
+
+            // Disable buttons if can't afford
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                const price = parseInt(btn.querySelector('.price')?.textContent || btn.textContent.match(/\d+/)[0]);
+                btn.disabled = price > gameState.coins;
+            });
+        }
+
+        // Update the buyItem function
+        function buyItem(itemType) {
+            let price = 0;
+            let success = false;
+
+            switch (itemType) {
+                case 'streakShield':
+                    price = Math.max(1, Math.floor(gameState.coins * 0.1));
+                    if (gameState.coins >= price) {
+                        gameState.streakShields++;
+                        success = true;
+                    }
+                    break;
+
+                case 'trophy':
+                    price = Math.floor(20 * Math.pow(6, Math.min(gameState.trophies, 10)) *
+                        (gameState.trophies >= 10 ? (1 + (gameState.trophies - 10) * 0.1) : 1));
+                    if (gameState.coins >= price) {
+                        gameState.trophies++;
+                        success = true;
+                    }
+                    break;
+
+                case 'streakExtender':
+                    price = 250000;
+                    if (gameState.coins >= price && !gameState.streakExtenderOwned) {
+                        gameState.streakExtenderOwned = true;
+                        success = true;
+                    }
+                    break;
+            }
+
+            if (success) {
+                gameState.coins -= price;
+                updateUI();
+                saveGameState();
+                showNotification('Purchase Successful', `You bought ${itemType}!`, 'OK');
+            }
         }
 
         // Initialize the game

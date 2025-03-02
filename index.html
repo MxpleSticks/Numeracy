@@ -154,7 +154,16 @@
         }
 
         .light-mode .settings-btn {
-            color: var (--text-light);
+            color: var(--text-light);
+            /* Fix the typo in the variable name */
+        }
+
+        .settings-btn svg {
+            fill: none;
+            stroke: currentColor;
+            /* This makes the SVG inherit the parent's color */
+            width: 24px;
+            height: 24px;
         }
 
         .game-container {

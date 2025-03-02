@@ -235,7 +235,7 @@
         .light-mode .bet-input {
             border: 1px solid var(--border-light);
             background-color: var(--accent-light);
-            color: var(--text-light);
+            color: var (--text-light);
         }
 
         .bet-btn {
@@ -1111,8 +1111,13 @@
 
         // Function to stop all sounds
         function stopAllSounds() {
-            Object.values(audio).forEach(sound => sound.pause());
-            Object.values(audio).forEach(sound => sound.currentTime = 0);
+            // Stop all sounds except background music
+            Object.entries(audio).forEach(([key, sound]) => {
+                if (key !== 'background') {
+                    sound.pause();
+                    sound.currentTime = 0;
+                }
+            });
         }
 
         // Add this function after the audio declarations
@@ -1250,7 +1255,6 @@
 
                 // Play sound
                 if (gameState.soundEffects) {
-                    stopAllSounds();
                     audio.win.play().catch(e => console.log('Audio play prevented:', e));
                 }
             } else {
@@ -1261,6 +1265,9 @@
                 } else {
                     gameState.coins -= betAmount;
                     gameState.streak = 0;
+                }
+                if (gameState.soundEffects) {
+                    audio.lose.play().catch(e => console.log('Audio play prevented:', e));
                 }
             }
 
@@ -1380,7 +1387,6 @@
             saveTheme();
 
             if (gameState.soundEffects) {
-                stopAllSounds();
                 audio.button.play().catch(e => console.log('Audio play prevented:', e));
             }
         }
